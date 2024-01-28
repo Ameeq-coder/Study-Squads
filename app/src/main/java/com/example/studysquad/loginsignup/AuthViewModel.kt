@@ -1,5 +1,6 @@
 package com.example.studysquad.loginsignup
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -11,5 +12,8 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) :ViewModel(){
- private val _authresult= MutableLiveData<FirebaseAuthResult>()
+ private val authresults= MutableLiveData<FirebaseAuthResult>()
+ val authResult:LiveData<FirebaseAuthResult> = authresults
+
+
 }
