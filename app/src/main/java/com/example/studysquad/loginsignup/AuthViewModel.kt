@@ -14,6 +14,22 @@ class AuthViewModel @Inject constructor(
 ) :ViewModel(){
  private val authresults= MutableLiveData<FirebaseAuthResult>()
  val authResult:LiveData<FirebaseAuthResult> = authresults
-
-
+    fun login(email:String,password:String){
+        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {task->
+            if (task.isSuccessful){
+                authresults.value=FirebaseAuthResult.Sucess
+            }else{
+                authresults.value=FirebaseAuthResult.Error(task.exception?.message)
+            }
+        }
+    }
+    fun signup(email:String,password:String){
+        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {task->
+            if (task.isSuccessful){
+                authresults.value=FirebaseAuthResult.Sucess
+            }else{
+                authresults.value=FirebaseAuthResult.Error(task.exception?.message)
+            }
+        }
+    }
 }
