@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "445509782142",
+    "project_id": "study-squad-f7417",
+    "storage_bucket": "study-squad-f7417.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445509782142:android:a73bc409df75547839e62f",
+        "android_client_info": {
+          "package_name": "com.example.studysquad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK9134bqdBdSD464K6V9rZmfE0tibc9v0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
