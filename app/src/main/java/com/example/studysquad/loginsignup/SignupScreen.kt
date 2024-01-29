@@ -2,8 +2,11 @@ package com.example.studysquad.loginsignup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,13 +21,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -69,7 +71,7 @@ fun Signup() {
             value = emailstate.value,
             colors = customColors,
             onValueChange = { emailstate.value = it },
-            label = { Text(text = "Enter Email")},
+            label = { Text(text = "Enter Email") },
             leadingIcon = {
                 IconButton(onClick = {}) {
                     Icon(
@@ -87,7 +89,7 @@ fun Signup() {
             value = emailstate.value,
             colors = customColors,
             onValueChange = { passwordstate.value = it },
-            label = { Text(text = "Enter Your Password")},
+            label = { Text(text = "Enter Your Password") },
             leadingIcon = {
                 IconButton(onClick = {}) {
                     Icon(
@@ -105,7 +107,7 @@ fun Signup() {
             value = emailstate.value,
             colors = customColors,
             onValueChange = { confirmstate.value = it },
-            label = { Text(text = "Confirm Your Password")},
+            label = { Text(text = "Confirm Your Password") },
             leadingIcon = {
                 IconButton(onClick = {}) {
                     Icon(
@@ -115,7 +117,43 @@ fun Signup() {
                     )
                 }
             })
+        Spacer(modifier = Modifier.height(14.dp))
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            GradientButton(
+                text = "Login", textColor = Color.White, gradient = Brush.verticalGradient(
+                    colors = listOf(
+                        colorResource(id = R.color.first_color),
+                        colorResource(id = R.color.second_color)
+                    )
+                )
+            ) {
+
+            }
+        }
+        Spacer(modifier = Modifier.height(15.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Don't Have An Account ?", modifier = Modifier,
+                fontFamily = FontFamily.Default
+            )
+
+            Text(
+                text = "Create One", modifier = Modifier,
+                fontFamily = FontFamily.Default,
+                fontWeight = FontWeight.Bold, // Set the text to be bold
+                color = colorResource(id = R.color.lightblue)
+            )
+
+        }
+
+
     }
+
 
 }
 
