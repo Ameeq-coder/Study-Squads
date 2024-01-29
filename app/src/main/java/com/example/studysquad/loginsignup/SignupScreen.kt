@@ -4,11 +4,22 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +45,11 @@ fun Signup() {
             .background(Color.White)
             .fillMaxSize(),
     ) {
+        val customColors = OutlinedTextFieldDefaults.colors(
+            cursorColor = colorResource(id = R.color.lightblue), // Change the cursor color
+            focusedBorderColor = Color.Gray, // Change the color when the field is focused
+            unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
+        )
         Box(modifier = Modifier, contentAlignment = Alignment.TopCenter) {
             Image(painter = painterResource(id = R.drawable.loginsignup), contentDescription = null)
         }
@@ -45,9 +61,60 @@ fun Signup() {
             style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
             fontFamily = FontFamily.Cursive
         )
-        OutlinedTextField(value = emailstate.value,
+        Spacer(modifier = Modifier.height(20.dp))
+        OutlinedTextField(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 24.dp, end = 24.dp)
+            .align(Alignment.CenterHorizontally),
+            value = emailstate.value,
+            colors = customColors,
             onValueChange = { emailstate.value = it },
-            label = { Text(text = "Email")})
+            label = { Text(text = "Enter Email")},
+            leadingIcon = {
+                IconButton(onClick = {}) {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = "Email Icon",
+                        tint = colorResource(id = R.color.lightblue)
+                    )
+                }
+            })
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 24.dp, end = 24.dp)
+            .align(Alignment.CenterHorizontally),
+            value = emailstate.value,
+            colors = customColors,
+            onValueChange = { passwordstate.value = it },
+            label = { Text(text = "Enter Your Password")},
+            leadingIcon = {
+                IconButton(onClick = {}) {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "Email Icon",
+                        tint = colorResource(id = R.color.lightblue)
+                    )
+                }
+            })
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 24.dp, end = 24.dp)
+            .align(Alignment.CenterHorizontally),
+            value = emailstate.value,
+            colors = customColors,
+            onValueChange = { confirmstate.value = it },
+            label = { Text(text = "Confirm Your Password")},
+            leadingIcon = {
+                IconButton(onClick = {}) {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "Email Icon",
+                        tint = colorResource(id = R.color.lightblue)
+                    )
+                }
+            })
     }
 
 }
