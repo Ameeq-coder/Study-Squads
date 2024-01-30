@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -32,13 +33,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.studysquad.R
 import com.example.studysquad.ui.theme.StudySquadTheme
 
 @Composable
-fun Signup() {
+fun Signup(authViewModel: AuthViewModel) {
     val emailstate = remember { mutableStateOf("") }
     val passwordstate = remember { mutableStateOf("") }
     val confirmstate = remember { mutableStateOf("") }
@@ -48,11 +50,17 @@ fun Signup() {
             .fillMaxSize(),
     ) {
         val customColors = OutlinedTextFieldDefaults.colors(
+            unfocusedTextColor = colorResource(id = R.color.black),
+            focusedTextColor = colorResource(id = R.color.black),
             cursorColor = colorResource(id = R.color.lightblue), // Change the cursor color
             focusedBorderColor = Color.Gray, // Change the color when the field is focused
             unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
         )
-        Box(modifier = Modifier, contentAlignment = Alignment.TopCenter) {
+        Box(
+            modifier = Modifier
+                .width(400.dp)
+                .height(350.dp), contentAlignment = Alignment.TopCenter
+        ) {
             Image(painter = painterResource(id = R.drawable.loginsignup), contentDescription = null)
         }
         Text(
@@ -63,7 +71,7 @@ fun Signup() {
             style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
             fontFamily = FontFamily.Cursive
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(modifier = Modifier
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp)
@@ -71,7 +79,7 @@ fun Signup() {
             value = emailstate.value,
             colors = customColors,
             onValueChange = { emailstate.value = it },
-            label = { Text(text = "Enter Email") },
+            label = { Text(text = "Enter Email", color = Color.Black) },
             leadingIcon = {
                 IconButton(onClick = {}) {
                     Icon(
@@ -81,15 +89,16 @@ fun Signup() {
                     )
                 }
             })
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(modifier = Modifier
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp)
             .align(Alignment.CenterHorizontally),
-            value = emailstate.value,
+            value = passwordstate.value,
             colors = customColors,
+            visualTransformation = PasswordVisualTransformation(),
             onValueChange = { passwordstate.value = it },
-            label = { Text(text = "Enter Your Password") },
+            label = { Text(text = "Enter Your Password", color = Color.Black) },
             leadingIcon = {
                 IconButton(onClick = {}) {
                     Icon(
@@ -99,15 +108,16 @@ fun Signup() {
                     )
                 }
             })
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(modifier = Modifier
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp)
             .align(Alignment.CenterHorizontally),
-            value = emailstate.value,
+            value = confirmstate.value,
             colors = customColors,
+            visualTransformation = PasswordVisualTransformation(),
             onValueChange = { confirmstate.value = it },
-            label = { Text(text = "Confirm Your Password") },
+            label = { Text(text = "Confirm Your Password", color = Color.Black) },
             leadingIcon = {
                 IconButton(onClick = {}) {
                     Icon(
@@ -120,15 +130,14 @@ fun Signup() {
         Spacer(modifier = Modifier.height(14.dp))
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             GradientButton(
-                text = "Login", textColor = Color.White, gradient = Brush.verticalGradient(
+                text = "Login", textColor = Color.White,
+                onClick = { authViewModel.signup(emailstate.value,passwordstate.value) },
+                gradient = Brush.verticalGradient(
                     colors = listOf(
-                        colorResource(id = R.color.first_color),
-                        colorResource(id = R.color.second_color)
-                    )
-                )
-            ) {
+                        colorResource(id = R.color.first_color), colorResource(id = R.color.second_color))
 
-            }
+                )
+            )
         }
         Spacer(modifier = Modifier.height(15.dp))
         Row(
@@ -161,7 +170,7 @@ fun Signup() {
 @Composable
 fun SignupPreview() {
     StudySquadTheme {
-        Signup() // Pass the required parameters to Signup function
+
     }
 
 }
