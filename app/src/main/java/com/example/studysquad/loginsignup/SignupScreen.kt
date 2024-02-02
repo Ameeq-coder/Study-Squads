@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,11 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.studysquad.R
@@ -44,25 +47,19 @@ fun Signup(authViewModel: AuthViewModel) {
     val emailstate = remember { mutableStateOf("") }
     val passwordstate = remember { mutableStateOf("") }
     val confirmstate = remember { mutableStateOf("") }
+    val customColors = OutlinedTextFieldDefaults.colors(
+        unfocusedTextColor = colorResource(id = R.color.black),
+        focusedTextColor = colorResource(id = R.color.black),
+        cursorColor = colorResource(id = R.color.lightblue), // Change the cursor color
+        focusedBorderColor = Color.Gray, // Change the color when the field is focused
+        unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
+    )
     Column(
         modifier = Modifier
             .background(Color.White)
             .fillMaxSize(),
     ) {
-        val customColors = OutlinedTextFieldDefaults.colors(
-            unfocusedTextColor = colorResource(id = R.color.black),
-            focusedTextColor = colorResource(id = R.color.black),
-            cursorColor = colorResource(id = R.color.lightblue), // Change the cursor color
-            focusedBorderColor = Color.Gray, // Change the color when the field is focused
-            unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
-        )
-        Box(
-            modifier = Modifier
-                .width(400.dp)
-                .height(350.dp), contentAlignment = Alignment.TopCenter
-        ) {
-            Image(painter = painterResource(id = R.drawable.loginsignup), contentDescription = null)
-        }
+        Logo()
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
@@ -72,69 +69,41 @@ fun Signup(authViewModel: AuthViewModel) {
             fontFamily = FontFamily.Cursive
         )
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 24.dp, end = 24.dp)
-            .align(Alignment.CenterHorizontally),
+        OutlinedTextFieldWithIcon(
             value = emailstate.value,
-            colors = customColors,
             onValueChange = { emailstate.value = it },
-            label = { Text(text = "Enter Email", color = Color.Black) },
-            leadingIcon = {
-                IconButton(onClick = {}) {
-                    Icon(
-                        imageVector = Icons.Default.Email,
-                        contentDescription = "Email Icon",
-                        tint = colorResource(id = R.color.lightblue)
-                    )
-                }
-            })
+            label = "Enter Your Email",
+            leadingIcon = Icons.Default.Email,
+            customColors = customColors,
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 24.dp, end = 24.dp)
-            .align(Alignment.CenterHorizontally),
+        OutlinedTextFieldWithIcon(
             value = passwordstate.value,
-            colors = customColors,
-            visualTransformation = PasswordVisualTransformation(),
             onValueChange = { passwordstate.value = it },
-            label = { Text(text = "Enter Your Password", color = Color.Black) },
-            leadingIcon = {
-                IconButton(onClick = {}) {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "Email Icon",
-                        tint = colorResource(id = R.color.lightblue)
-                    )
-                }
-            })
+            label = "Enter Your Password",
+            leadingIcon = Icons.Default.Lock,
+            customColors = customColors,
+            visualTransformation = PasswordVisualTransformation()
+        )
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 24.dp, end = 24.dp)
-            .align(Alignment.CenterHorizontally),
+        OutlinedTextFieldWithIcon(
             value = confirmstate.value,
-            colors = customColors,
-            visualTransformation = PasswordVisualTransformation(),
             onValueChange = { confirmstate.value = it },
-            label = { Text(text = "Confirm Your Password", color = Color.Black) },
-            leadingIcon = {
-                IconButton(onClick = {}) {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "Email Icon",
-                        tint = colorResource(id = R.color.lightblue)
-                    )
-                }
-            })
+            label = "Confirm Your Password",
+            leadingIcon = Icons.Default.Lock,
+            customColors = customColors,
+            visualTransformation = PasswordVisualTransformation()
+        )
         Spacer(modifier = Modifier.height(14.dp))
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             GradientButton(
                 text = "Login", textColor = Color.White,
-                onClick = { authViewModel.signup(emailstate.value,passwordstate.value) },
+                onClick = {   authViewModel.signup(emailstate.value,passwordstate.value) },
                 gradient = Brush.verticalGradient(
                     colors = listOf(
-                        colorResource(id = R.color.first_color), colorResource(id = R.color.second_color))
+                        colorResource(id = R.color.first_color),
+                        colorResource(id = R.color.second_color)
+                    )
 
                 )
             )
@@ -163,8 +132,54 @@ fun Signup(authViewModel: AuthViewModel) {
 
     }
 
-
 }
+
+@Composable
+private fun OutlinedTextFieldWithIcon(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    leadingIcon: ImageVector,
+    customColors: TextFieldColors,
+    visualTransformation: VisualTransformation? = null
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 24.dp, end = 24.dp),
+        label = { Text(text = label, color = Color.Black) },
+        leadingIcon = {
+            IconButton(onClick = {}) {
+                Icon(
+                    imageVector = leadingIcon,
+                    contentDescription = null,
+                    tint = colorResource(id = R.color.lightblue)
+                )
+            }
+        },
+        visualTransformation = visualTransformation ?: VisualTransformation.None,
+        colors = customColors
+    )
+}
+
+
+@Composable
+fun Logo() {
+    Box(
+        modifier = Modifier
+            .width(400.dp)
+            .height(350.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.loginsignup),
+            contentDescription = null
+        )
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable

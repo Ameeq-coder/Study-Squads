@@ -36,5 +36,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     StudySquadTheme {
+        Signup(authViewModel = viewModel())
     }
 }
