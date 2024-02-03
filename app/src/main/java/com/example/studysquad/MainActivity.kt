@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.studysquad.loginsignup.AuthViewModel
+import com.example.studysquad.loginsignup.Login
 import com.example.studysquad.loginsignup.Signup
 import com.example.studysquad.ui.theme.StudySquadTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
             StudySquadTheme {
                 // A surface container using the 'background' color from the theme
                 val viewModel: AuthViewModel = viewModel()
-                Signup(viewModel)
+                Login(viewModel)
             }
         }
     }

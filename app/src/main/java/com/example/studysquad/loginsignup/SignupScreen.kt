@@ -39,11 +39,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.studysquad.R
 import com.example.studysquad.ui.theme.StudySquadTheme
 
 @Composable
-fun Signup(authViewModel: AuthViewModel) {
+fun Signup(authViewModel: AuthViewModel,navController: NavController) {
     val emailstate = remember { mutableStateOf("") }
     val passwordstate = remember { mutableStateOf("") }
     val confirmstate = remember { mutableStateOf("") }
@@ -135,7 +136,7 @@ fun Signup(authViewModel: AuthViewModel) {
 }
 
 @Composable
-private fun OutlinedTextFieldWithIcon(
+ fun OutlinedTextFieldWithIcon(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
