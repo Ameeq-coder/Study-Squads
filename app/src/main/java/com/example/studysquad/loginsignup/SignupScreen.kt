@@ -41,10 +41,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.studysquad.R
+import com.example.studysquad.di.NavViewModel
 import com.example.studysquad.ui.theme.StudySquadTheme
 
 @Composable
-fun Signup(authViewModel: AuthViewModel,navController: NavController) {
+fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewModel: NavViewModel) {
     val emailstate = remember { mutableStateOf("") }
     val passwordstate = remember { mutableStateOf("") }
     val confirmstate = remember { mutableStateOf("") }

@@ -11,6 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.example.studysquad.Navigations.NavGraph
+import com.example.studysquad.Navigations.Route
+import com.example.studysquad.di.NavViewModel
 import com.example.studysquad.loginsignup.AuthViewModel
 import com.example.studysquad.loginsignup.Login
 import com.example.studysquad.loginsignup.Signup
@@ -19,13 +23,16 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             StudySquadTheme {
                 // A surface container using the 'background' color from the theme
-                val viewModel: AuthViewModel = viewModel()
-                Login(viewModel)
+                val authviewModel: AuthViewModel = viewModel()
+                val navViewModel:NavViewModel=viewModel()
+                val navController = rememberNavController()
+                NavGraph(startDestination = Route.LoginScreen.route, authViewModel = authviewModel, navViewModel = navViewModel)
             }
         }
     }
@@ -37,6 +44,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     StudySquadTheme {
-        Signup(authViewModel = viewModel())
+
     }
 }

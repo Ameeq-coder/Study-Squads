@@ -1,6 +1,7 @@
 package com.example.studysquad.loginsignup
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,12 +31,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.studysquad.Navigations.Route
 import com.example.studysquad.R
+import com.example.studysquad.di.NavViewModel
+import dagger.hilt.android.AndroidEntryPoint
+
+
+
 
 
 @Composable
-fun Login(authViewModel: AuthViewModel,navController: NavController){
+fun Login(authViewModel: AuthViewModel, navController: NavController, navViewModel: NavViewModel){
     val emailstate = remember { mutableStateOf("") }
+    val navigatetoSignup=navViewModel.navigateToSignUp.observeAsState()
     val passwordstate = remember { mutableStateOf("") }
     val customColors = OutlinedTextFieldDefaults.colors(
         unfocusedTextColor = colorResource(id = R.color.black),
@@ -42,6 +52,15 @@ fun Login(authViewModel: AuthViewModel,navController: NavController){
         focusedBorderColor = Color.Gray, // Change the color when the field is focused
         unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
     )
+    LaunchedEffect(navigatetoSignup.value) {
+        if (navigatetoSignup.value == true) {
+            // Navigate to the signup screen using the NavController
+            navController.navigate(Route.SignupScreen.route) {
+                // Optionally, you can specify additional navigation options here
+            }
+            navViewModel.onNavigateToSignUpComplete()
+        }
+    }
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color.White),) {
@@ -97,10 +116,12 @@ fun Login(authViewModel: AuthViewModel,navController: NavController){
             )
 
             Text(
-                text = "Create One", modifier = Modifier,
+                text = "Create One", modifier = Modifier.clickable {
+                        navViewModel.navigateToSignUp()
+                },
                 fontFamily = FontFamily.Default,
                 fontWeight = FontWeight.Bold, // Set the text to be bold
-                color = colorResource(id = R.color.lightblue)
+                color = colorResource(id = R.color.lightblue),
             )
 
         }
@@ -111,4 +132,5 @@ fun Login(authViewModel: AuthViewModel,navController: NavController){
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview(){
+
 }

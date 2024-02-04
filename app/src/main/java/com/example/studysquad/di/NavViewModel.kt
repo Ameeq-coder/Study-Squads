@@ -6,10 +6,11 @@ import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
 
-class AuthViewModel @Inject constructor() :ViewModel() {
+class NavViewModel @Inject constructor() :ViewModel() {
 
     private val _navigateToSignUp = MutableLiveData<Boolean>()
     val navigateToSignUp: LiveData<Boolean> = _navigateToSignUp
+
 
     fun navigateToSignUp() {
         _navigateToSignUp.value = true
