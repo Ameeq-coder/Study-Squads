@@ -28,11 +28,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StudySquadTheme {
-                // A surface container using the 'background' color from the theme
                 val authviewModel: AuthViewModel = viewModel()
                 val navViewModel:NavViewModel=viewModel()
-                val navController = rememberNavController()
-                NavGraph(startDestination = Route.LoginScreen.route, authViewModel = authviewModel, navViewModel = navViewModel)
+                NavGraph(startDestination = Route.SignupScreen.route, authViewModel = authviewModel, navViewModel = navViewModel)
             }
         }
     }

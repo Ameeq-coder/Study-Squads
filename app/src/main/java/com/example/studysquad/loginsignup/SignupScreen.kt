@@ -131,12 +131,12 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Don't Have An Account ?", modifier = Modifier,
+                text = "Already have an Account?", modifier = Modifier,
                 fontFamily = FontFamily.Default
             )
 
             Text(
-                text = "Create One", modifier = Modifier.clickable {
+                text = "Login", modifier = Modifier.clickable {
                     navViewModel.navigateToSignUp()
                 },
                 fontFamily = FontFamily.Default,
