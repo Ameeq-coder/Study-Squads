@@ -24,6 +24,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,6 +42,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.studysquad.Navigations.Route
 import com.example.studysquad.R
 import com.example.studysquad.di.NavViewModel
 import com.example.studysquad.ui.theme.StudySquadTheme
@@ -49,6 +52,7 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
     val emailstate = remember { mutableStateOf("") }
     val passwordstate = remember { mutableStateOf("") }
     val confirmstate = remember { mutableStateOf("") }
+    val navigateToSignUp = navViewModel.navigateToSignUp.observeAsState()
     val customColors = OutlinedTextFieldDefaults.colors(
         unfocusedTextColor = colorResource(id = R.color.black),
         focusedTextColor = colorResource(id = R.color.black),
@@ -56,6 +60,15 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
         focusedBorderColor = Color.Gray, // Change the color when the field is focused
         unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
     )
+    LaunchedEffect(navigateToSignUp.value) {
+        if (navigateToSignUp.value == true) {
+            // Navigate to the signup screen using the NavController
+            navController.navigate(Route.LoginScreen.route) {
+                // Optionally, you can specify additional navigation options here
+            }
+            navViewModel.onNavigateToSignUpComplete()
+        }
+    }
     Column(
         modifier = Modifier
             .background(Color.White)
@@ -123,7 +136,9 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
             )
 
             Text(
-                text = "Create One", modifier = Modifier,
+                text = "Create One", modifier = Modifier.clickable {
+                    navViewModel.navigateToSignUp()
+                },
                 fontFamily = FontFamily.Default,
                 fontWeight = FontWeight.Bold, // Set the text to be bold
                 color = colorResource(id = R.color.lightblue)
