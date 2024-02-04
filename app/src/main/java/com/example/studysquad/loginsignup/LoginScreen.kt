@@ -102,7 +102,7 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
                         Toast.makeText(context,"Login Sucess",Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        Toast.makeText(context,"Sorry",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Wrong Details Sorry",Toast.LENGTH_SHORT).show()
                     }
 
                 }
