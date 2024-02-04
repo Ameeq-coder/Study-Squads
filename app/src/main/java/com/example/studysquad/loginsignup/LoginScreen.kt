@@ -1,5 +1,6 @@
 package com.example.studysquad.loginsignup
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,8 +38,6 @@ import com.example.studysquad.Navigations.Route
 import com.example.studysquad.R
 import com.example.studysquad.di.NavViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
-
 
 
 
@@ -52,6 +53,8 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
         focusedBorderColor = Color.Gray, // Change the color when the field is focused
         unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
     )
+    val context = LocalContext.current
+
     LaunchedEffect(navigatetoSignup.value) {
         if (navigatetoSignup.value == true) {
             // Navigate to the signup screen using the NavController
@@ -94,7 +97,17 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             GradientButton(
                 text = "Login", textColor = Color.White,
-                onClick = { authViewModel.login(emailstate.value,passwordstate.value)  },
+                onClick = { authViewModel.login(emailstate.value,passwordstate.value){isSuccess->
+                    if (isSuccess){
+                        Toast.makeText(context,"Login Sucess",Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        Toast.makeText(context,"Sorry",Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+
+                          },
                 gradient = Brush.verticalGradient(
                     colors = listOf(
                         colorResource(id = R.color.first_color),
@@ -128,6 +141,7 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
 
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
