@@ -100,7 +100,6 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
                 onClick = { authViewModel.login(emailstate.value,passwordstate.value){isSuccess->
                     if (isSuccess){
                         Toast.makeText(context,"Login Sucess",Toast.LENGTH_SHORT).show()
-                        Toast.makeText(context,"I love You Zanu",Toast.LENGTH_SHORT).show() // esa likha ga code ma
                     }
                     else{
                         Toast.makeText(context,"Wrong Details Sorry",Toast.LENGTH_SHORT).show()

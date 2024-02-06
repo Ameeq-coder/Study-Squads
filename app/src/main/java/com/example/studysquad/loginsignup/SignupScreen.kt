@@ -1,5 +1,6 @@
 package com.example.studysquad.loginsignup
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -60,6 +62,8 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
         focusedBorderColor = Color.Gray, // Change the color when the field is focused
         unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
     )
+    val context = LocalContext.current
+
     LaunchedEffect(navigateToSignUp.value) {
         if (navigateToSignUp.value == true) {
             // Navigate to the signup screen using the NavController
@@ -112,8 +116,14 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
         Spacer(modifier = Modifier.height(14.dp))
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             GradientButton(
-                text = "Login", textColor = Color.White,
-                onClick = {   authViewModel.signup(emailstate.value,passwordstate.value) },
+                text = "Create Account", textColor = Color.White,
+                onClick = {   authViewModel.signup(emailstate.value,passwordstate.value){isSuccess->
+                    if (isSuccess){
+                        Toast.makeText(context,"Account Created Sucess", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(context,"Account Created Failed",Toast.LENGTH_SHORT).show()
+                    }
+                } },
                 gradient = Brush.verticalGradient(
                     colors = listOf(
                         colorResource(id = R.color.first_color),

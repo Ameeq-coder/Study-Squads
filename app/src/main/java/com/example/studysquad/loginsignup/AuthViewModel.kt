@@ -33,13 +33,15 @@ class AuthViewModel @Inject constructor(
             }
     }
 
-    fun signup(email: String, password: String) {
+    fun signup(email: String, password: String,callback: (Boolean) -> Unit) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _authResult.value = FirebaseAuthResult.Sucess
+                    callback(true)
                 } else {
                     _authResult.value = FirebaseAuthResult.Error(task.exception?.message)
+                    callback(false)
                 }
             }
     }
