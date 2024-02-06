@@ -117,7 +117,7 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             GradientButton(
                 text = "Create Account", textColor = Color.White,
-                onClick = {   authViewModel.signup(emailstate.value,passwordstate.value){isSuccess->
+                onClick = {   authViewModel.signup(emailstate.value,passwordstate.value,confirmstate.value){isSuccess->
                     if (isSuccess){
                         Toast.makeText(context,"Account Created Sucess", Toast.LENGTH_SHORT).show()
                     }else{
