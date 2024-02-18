@@ -11,4 +11,7 @@
     <color name="first_color">#00c6ff</color>
     <color name="second_color">#0072ff</color>
 
+    <color name="postcolorone">#000000</color>
+    <color name="postcolortwo">#434343</color>
+
 </resources>
