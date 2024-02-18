@@ -40,11 +40,10 @@ import com.example.studysquad.di.NavViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
-
 @Composable
-fun Login(authViewModel: AuthViewModel, navController: NavController, navViewModel: NavViewModel){
+fun Login(authViewModel: AuthViewModel, navController: NavController, navViewModel: NavViewModel) {
     val emailstate = remember { mutableStateOf("") }
-    val navigatetoSignup=navViewModel.navigateToSignUp.observeAsState()
+    val navigatetoSignup = navViewModel.navigateToSignUp.observeAsState()
     val passwordstate = remember { mutableStateOf("") }
     val customColors = OutlinedTextFieldDefaults.colors(
         unfocusedTextColor = colorResource(id = R.color.black),
@@ -64,9 +63,11 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
             navViewModel.onNavigateToSignUpComplete()
         }
     }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White),) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+    ) {
         Logo()
         Text(
             modifier = Modifier
@@ -97,17 +98,26 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             GradientButton(
                 text = "Login", textColor = Color.White,
-                onClick = { authViewModel.login(emailstate.value,passwordstate.value){isSuccess->
-                    if (isSuccess){
-                        Toast.makeText(context,"Login Sucess",Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        Toast.makeText(context,"Wrong Details Sorry",Toast.LENGTH_SHORT).show()
-                    }
+                onClick = {
+                    val email = emailstate.value
+                    val password = passwordstate.value
+                    if (email.isEmpty() || password.isEmpty()) {
+                        Toast.makeText(context, "Enter Details", Toast.LENGTH_SHORT).show()
+                    } else {
 
-                }
 
-                          },
+                        authViewModel.login(emailstate.value, passwordstate.value) { isSuccess ->
+                            if (isSuccess) {
+                                Toast.makeText(context, "Login Sucess", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Wrong Details Sorry", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                        }
+
+                    }
+                },
                 gradient = Brush.verticalGradient(
                     colors = listOf(
                         colorResource(id = R.color.first_color),
@@ -129,8 +139,9 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
             )
 
             Text(
-                text = "Create One", modifier = Modifier.clickable {
-                        navViewModel.navigateToSignUp()
+                text = "Create One",
+                modifier = Modifier.clickable {
+                    navViewModel.navigateToSignUp()
                 },
                 fontFamily = FontFamily.Default,
                 fontWeight = FontWeight.Bold, // Set the text to be bold
@@ -145,6 +156,6 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
 
 @Preview(showBackground = true)
 @Composable
-fun LoginPreview(){
+fun LoginPreview() {
 
 }

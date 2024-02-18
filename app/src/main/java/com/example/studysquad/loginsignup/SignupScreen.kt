@@ -117,13 +117,34 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             GradientButton(
                 text = "Create Account", textColor = Color.White,
-                onClick = {   authViewModel.signup(emailstate.value,passwordstate.value,confirmstate.value){isSuccess->
-                    if (isSuccess){
-                        Toast.makeText(context,"Account Created Sucess", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(context,"Account Created Failed",Toast.LENGTH_SHORT).show()
+                onClick = {
+                    val email = emailstate.value
+                    val password = passwordstate.value
+                    val conpass = confirmstate.value
+                    if (email.isEmpty() || password.isEmpty() || conpass.isEmpty()) {
+                        Toast.makeText(context, "Enter Details", Toast.LENGTH_SHORT).show()
+                    } else {
+                        authViewModel.signup(
+                            emailstate.value,
+                            passwordstate.value,
+                            confirmstate.value
+                        ) { isSuccess ->
+                            if (isSuccess) {
+                                Toast.makeText(
+                                    context,
+                                    "Account Created Sucess",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Account Created Failed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                     }
-                } },
+                },
                 gradient = Brush.verticalGradient(
                     colors = listOf(
                         colorResource(id = R.color.first_color),
