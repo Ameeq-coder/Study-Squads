@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberImagePainter
 import com.example.studysquad.R
 import com.example.studysquad.loginsignup.GradientButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,7 +126,12 @@ fun PostScreen() {
         }
 
         Column(modifier = Modifier) {
-            // If using a vector asset
+            viewmodel.selectedImageUri.value?.let { uri->
+                val painter = rememberImagePainter(uri)
+                Image(painter = painter,
+                    contentDescription = null,
+                    modifier=Modifier.fillMaxSize())
+            }
 
         }
 
