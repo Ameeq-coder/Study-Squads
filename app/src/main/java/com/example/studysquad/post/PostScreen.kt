@@ -1,8 +1,11 @@
 package com.example.studysquad.post
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -38,8 +42,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.studysquad.R
 import com.example.studysquad.loginsignup.GradientButton
+import dagger.hilt.android.AndroidEntryPoint
+
 
 @Composable
 fun PostScreen() {
@@ -48,7 +55,13 @@ fun PostScreen() {
             .fillMaxSize()
             .background(Color.White)
     ) {
+        val context = LocalContext.current
+        val viewmodel: ImagePickerViewModel = viewModel()
 
+        val galleryLauncher =
+            rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                viewmodel.selectedImageUri.value = uri
+            }
         Row(modifier = Modifier.fillMaxWidth()) {
             Icon(
                 modifier = Modifier.padding(top = 13.dp, start = 10.dp),
@@ -66,6 +79,20 @@ fun PostScreen() {
                 text = "Create Post ",
                 color = colorResource(id = R.color.lightblue),
                 textAlign = TextAlign.Center
+            )
+            val customIcon =
+                painterResource(id = R.drawable.camera) // Replace with your PNG file resource ID
+            Icon(
+                painter = customIcon,
+                contentDescription = "Gallery Icon",
+                tint = Color.Unspecified, // Optional tint color
+                modifier = Modifier
+                    .clickable {
+                        galleryLauncher.launch("image/*")
+                    }
+                    .align(Alignment.CenterVertically)
+                    .padding(end = 20.dp)
+                    .size(35.dp)
             )
             PostButton(
                 text = "Post", textColor = Color.White, gradient = Brush.verticalGradient(
@@ -97,25 +124,8 @@ fun PostScreen() {
             )
         }
 
-        Row(modifier = Modifier) {
+        Column(modifier = Modifier) {
             // If using a vector asset
-            val customIcon =
-                painterResource(id = R.drawable.camera) // Replace with your PNG file resource ID
-            Icon(
-                painter = customIcon,
-                contentDescription = "Gallery Icon",
-                tint = Color.Unspecified, // Optional tint color
-                modifier = Modifier
-                    .padding(top = 13.dp, start = 10.dp)
-                    .size(48.dp)
-            )
-            Text(
-                modifier = Modifier.padding(top = 24.dp, start = 10.dp),
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                text = "Gallery",
-                color = colorResource(id = R.color.lightblue),
-                textAlign = TextAlign.Center
-            )
 
         }
 
@@ -162,10 +172,8 @@ fun CustomTextField(
         )
 
 
-
     }
 }
-
 
 
 @Composable
