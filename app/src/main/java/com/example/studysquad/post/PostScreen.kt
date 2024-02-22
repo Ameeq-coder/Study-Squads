@@ -125,12 +125,16 @@ fun PostScreen() {
             )
         }
 
-        Column(modifier = Modifier) {
-            viewmodel.selectedImageUri.value?.let { uri->
+        Row(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+            viewmodel.selectedImageUri.value?.let { uri ->
                 val painter = rememberImagePainter(uri)
-                Image(painter = painter,
+                Image(
+                    painter = painter,
                     contentDescription = null,
-                    modifier=Modifier.fillMaxSize())
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 3.dp, start = 4.dp),
+                    alignment = Alignment.CenterStart)
             }
 
         }
