@@ -105,7 +105,7 @@ fun CreatePost() {
             leadingIcon = Icons.Default.AccountCircle,
             customColors = customColors,
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         GradientButton(text = "Signup", textColor = Color.White, gradient = Brush.verticalGradient(
             colors = listOf(
                 colorResource(id = R.color.first_color),
