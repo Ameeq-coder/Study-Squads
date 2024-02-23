@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.studysquad.R
+import com.example.studysquad.loginsignup.GradientButton
 import com.example.studysquad.loginsignup.OutlinedTextFieldWithIcon
 import com.example.studysquad.post.ImagePickerViewModel
 
@@ -103,6 +105,15 @@ fun CreatePost() {
             leadingIcon = Icons.Default.AccountCircle,
             customColors = customColors,
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        GradientButton(text = "Signup", textColor = Color.White, gradient = Brush.verticalGradient(
+            colors = listOf(
+                colorResource(id = R.color.first_color),
+                colorResource(id = R.color.second_color)
+            )
+        ) ) {
+
+        }
     }
 
 }
