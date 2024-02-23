@@ -7,4 +7,5 @@ object LoginScreen:Route(route = "login_screen")
 
 object SignupScreen:Route(route = "signup_screen")
 
+object CreatePost:Route(route = "create_screen")
 }

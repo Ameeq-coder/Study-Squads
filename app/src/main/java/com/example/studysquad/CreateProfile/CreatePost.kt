@@ -37,14 +37,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.studysquad.R
+import com.example.studysquad.di.NavViewModel
+import com.example.studysquad.loginsignup.AuthViewModel
 import com.example.studysquad.loginsignup.GradientButton
 import com.example.studysquad.loginsignup.OutlinedTextFieldWithIcon
 import com.example.studysquad.post.ImagePickerViewModel
 
 @Composable
-fun CreatePost() {
+fun CreatePost(
+    authViewModel: AuthViewModel,
+navController: NavController,
+    navViewModel: NavViewModel
+
+) {
+
 
     val emailstate = remember { mutableStateOf("") }
     val viewmodel: ImagePickerViewModel = viewModel()
@@ -106,7 +115,7 @@ fun CreatePost() {
             customColors = customColors,
         )
         Spacer(modifier = Modifier.height(15.dp))
-        GradientButton(text = "Signup", textColor = Color.White, gradient = Brush.verticalGradient(
+        GradientButton(text = "Create Profile", textColor = Color.White, gradient = Brush.verticalGradient(
             colors = listOf(
                 colorResource(id = R.color.first_color),
                 colorResource(id = R.color.second_color)
@@ -121,5 +130,5 @@ fun CreatePost() {
 @Preview(showBackground = true)
 @Composable
 fun CreatePostPreview(){
-    CreatePost()
+//    CreatePost()
 }

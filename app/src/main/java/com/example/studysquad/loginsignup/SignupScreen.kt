@@ -55,6 +55,7 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
     val passwordstate = remember { mutableStateOf("") }
     val confirmstate = remember { mutableStateOf("") }
     val navigateToSignUp = navViewModel.navigateToSignUp.observeAsState()
+    val navigatetopost=navViewModel.navigateToCreateProfile.observeAsState()
     val customColors = OutlinedTextFieldDefaults.colors(
         unfocusedTextColor = colorResource(id = R.color.black),
         focusedTextColor = colorResource(id = R.color.black),
@@ -63,6 +64,14 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
         unfocusedBorderColor = colorResource(id = R.color.lightblue), // Change the color when the field is not focused , // Change the text color
     )
     val context = LocalContext.current
+LaunchedEffect(navigatetopost.value){
+    if(navigatetopost.value==true){
+        navController.navigate(Route.CreatePost.route){
+
+        }
+        navViewModel.onNavigateToCreateProfileComplete()
+    }
+}
 
     LaunchedEffect(navigateToSignUp.value) {
         if (navigateToSignUp.value == true) {
@@ -135,6 +144,8 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
                                     "Account Created Sucess",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                navViewModel.navigateToCreateProfile()
+
                             } else {
                                 Toast.makeText(
                                     context,
