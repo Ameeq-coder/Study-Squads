@@ -49,10 +49,20 @@ class AuthViewModel @Inject constructor(
     }
 
     fun RealtimeDatabase(email: String, password: String, conpass: String) {
-        databaseReference = firebaseDatabase.getReference("Users")
-        val userdetails = mapOf("email" to email, "pass" to password, "conpass" to conpass)
-        databaseReference.push().setValue(userdetails)
+        val currentUser = firebaseAuth.currentUser
+        val userId = currentUser?.uid
+        if (userId != null) {
+            databaseReference = firebaseDatabase.getReference("Users")
+            val userDetailsMap = mutableMapOf<String, Any>(
+                "userId" to userId,
+                "email" to email,
+                "pass" to password,
+                "conpass" to conpass
+            )
+            databaseReference.child(userId).setValue(userDetailsMap)
+        }
     }
+
 }
 
 
