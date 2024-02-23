@@ -102,7 +102,7 @@ navController: NavController,
                 galleryLauncher.launch("image/*")
             },
             border = BorderStroke(1.dp, colorResource(id = R.color.lightblue)),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Cyan)
         ) {
             Text(text = "Select Image", color = Color.Black)
         }
