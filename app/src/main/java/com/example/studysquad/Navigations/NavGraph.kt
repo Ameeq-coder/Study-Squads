@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.studysquad.CreateProfile.CreatePost
+import com.example.studysquad.CreateProfile.CreateProfileViewModel
 import com.example.studysquad.di.NavViewModel
 import com.example.studysquad.loginsignup.AuthViewModel
 import com.example.studysquad.loginsignup.Login
@@ -15,7 +16,7 @@ import com.example.studysquad.loginsignup.Signup
 
 
 @Composable
-fun NavGraph(startDestination: String,authViewModel: AuthViewModel,navViewModel: NavViewModel) {
+fun NavGraph(startDestination: String,authViewModel: AuthViewModel,navViewModel: NavViewModel,createProfileViewModel: CreateProfileViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = startDestination) {
@@ -26,7 +27,7 @@ fun NavGraph(startDestination: String,authViewModel: AuthViewModel,navViewModel:
             Login(authViewModel = authViewModel, navController = navController, navViewModel = navViewModel)
         }
 composable(Route.CreatePost.route){
-    CreatePost(authViewModel = authViewModel,navController=navController,navViewModel=navViewModel)
+    CreatePost(authViewModel = authViewModel,navController=navController,navViewModel=navViewModel,createProfileViewModel)
 }
     }
 }

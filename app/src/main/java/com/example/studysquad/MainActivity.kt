@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.studysquad.CreateProfile.CreateProfileViewModel
 import com.example.studysquad.Navigations.NavGraph
 import com.example.studysquad.Navigations.Route
 import com.example.studysquad.di.NavViewModel
@@ -30,7 +31,8 @@ class MainActivity : ComponentActivity() {
             StudySquadTheme {
                 val authviewModel: AuthViewModel = viewModel()
                 val navViewModel:NavViewModel=viewModel()
-                NavGraph(startDestination = Route.SignupScreen.route, authViewModel = authviewModel, navViewModel = navViewModel)
+                val createpostviewmodel:CreateProfileViewModel= viewModel()
+                NavGraph(startDestination = Route.SignupScreen.route, authViewModel = authviewModel, navViewModel = navViewModel,createpostviewmodel)
             }
         }
     }

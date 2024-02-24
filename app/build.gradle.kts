@@ -69,6 +69,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.6")
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     testImplementation("junit:junit:4.13.2")
     implementation ("io.coil-kt:coil-compose:2.4.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

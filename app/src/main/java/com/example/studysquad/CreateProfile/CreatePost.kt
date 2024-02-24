@@ -50,8 +50,8 @@ import com.example.studysquad.post.ImagePickerViewModel
 fun CreatePost(
     authViewModel: AuthViewModel,
 navController: NavController,
-    navViewModel: NavViewModel
-
+    navViewModel: NavViewModel,
+createProfileViewModel: CreateProfileViewModel
 ) {
 
 
@@ -115,14 +115,18 @@ navController: NavController,
             customColors = customColors,
         )
         Spacer(modifier = Modifier.height(15.dp))
-        GradientButton(text = "Create Profile", textColor = Color.White, gradient = Brush.verticalGradient(
+        GradientButton(text = "Create Profile", onClick = {
+            if (selectedImageUri != null) {
+                createProfileViewModel.uploadUserProfile(emailstate.value, selectedImageUri)
+            } else {
+                // Handle the case where selectedImageUri is null
+            }
+        }, textColor = Color.White, gradient = Brush.verticalGradient(
             colors = listOf(
                 colorResource(id = R.color.first_color),
                 colorResource(id = R.color.second_color)
             )
-        ) ) {
-
-        }
+        ) )
     }
 
 }
