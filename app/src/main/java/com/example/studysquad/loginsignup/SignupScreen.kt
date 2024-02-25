@@ -66,7 +66,7 @@ fun Signup(authViewModel: AuthViewModel,navController: NavController,navViewMode
     val context = LocalContext.current
 LaunchedEffect(navigatetopost.value){
     if(navigatetopost.value==true){
-        navController.navigate(Route.CreatePost.route){
+        navController.navigate(Route.CreateProfile.route){
 
         }
         navViewModel.onNavigateToCreateProfileComplete()

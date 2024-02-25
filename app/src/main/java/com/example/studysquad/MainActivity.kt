@@ -19,6 +19,7 @@ import com.example.studysquad.di.NavViewModel
 import com.example.studysquad.loginsignup.AuthViewModel
 import com.example.studysquad.loginsignup.Login
 import com.example.studysquad.loginsignup.Signup
+import com.example.studysquad.post.PostViewModel
 import com.example.studysquad.ui.theme.StudySquadTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,8 +32,9 @@ class MainActivity : ComponentActivity() {
             StudySquadTheme {
                 val authviewModel: AuthViewModel = viewModel()
                 val navViewModel:NavViewModel=viewModel()
-                val createpostviewmodel:CreateProfileViewModel= viewModel()
-                NavGraph(startDestination = Route.SignupScreen.route, authViewModel = authviewModel, navViewModel = navViewModel,createpostviewmodel)
+                val createprofileviewmodel:CreateProfileViewModel= viewModel()
+                val postViewModel:PostViewModel= viewModel()
+                NavGraph(startDestination = Route.SignupScreen.route, authViewModel = authviewModel, navViewModel = navViewModel,createprofileviewmodel,postViewModel)
             }
         }
     }

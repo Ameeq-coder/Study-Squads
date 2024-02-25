@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,13 +51,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @Composable
-fun PostScreen() {
+fun PostScreen(
+    postViewModel: PostViewModel
+) {
+    var text by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val context = LocalContext.current
+        var context = LocalContext.current
         val viewmodel: ImagePickerViewModel = viewModel()
 
         val galleryLauncher =
@@ -96,16 +101,15 @@ fun PostScreen() {
                     .size(35.dp)
             )
             PostButton(
-                text = "Post", textColor = Color.White, gradient = Brush.verticalGradient(
+                text = "Post", textColor = Color.White, onClick = {
+postViewModel.createPost(text,viewmodel.selectedImageUri.value!!)
+                }, gradient = Brush.verticalGradient(
                     colors = listOf(
                         colorResource(id = R.color.first_color),
                         colorResource(id = R.color.second_color)
                     )
                 )
-            ) {
-
-            }
-
+            )
         }
         Box(
             modifier = Modifier
@@ -115,14 +119,14 @@ fun PostScreen() {
                 .fillMaxWidth()
                 .border(width = 1.5.dp, color = colorResource(id = R.color.lightblue))
         ) {
-            var text by remember { mutableStateOf("") }
             CustomTextField(
-                value = text,
                 label = "What Do You Want To Talk About",
+                value=text,
                 onValueChange = { newText ->
-                    text = newText
+                    text = newText // Update the original text variable
                 }
             )
+
         }
 
         Row(modifier = Modifier.fillMaxWidth().height(200.dp)) {
@@ -142,7 +146,6 @@ fun PostScreen() {
     }
 
 }
-
 @Composable
 fun CustomTextField(
     label: String,
@@ -180,14 +183,14 @@ fun CustomTextField(
             },
             textStyle = TextStyle(color = Color.Black)
         )
-
-
     }
 }
+
+
+
 
 
 @Composable
 @Preview(showBackground = true)
 fun PostScreenPreview() {
-    PostScreen()
 }

@@ -14,6 +14,9 @@ class NavViewModel @Inject constructor() :ViewModel() {
     private val _navigateToCreateProfile = MutableLiveData<Boolean>()
     val navigateToCreateProfile: LiveData<Boolean> = _navigateToCreateProfile
 
+    private val _navigateToPostScreen=MutableLiveData<Boolean>()
+    val navigateToPostScreen:LiveData<Boolean> = _navigateToPostScreen
+
     fun navigateToSignUp() {
         _navigateToSignUp.value = true
     }
@@ -29,5 +32,11 @@ class NavViewModel @Inject constructor() :ViewModel() {
         _navigateToCreateProfile.value = false
     }
 
+    fun navigateToPostScreen(){
+        _navigateToPostScreen.value=true
+    }
+    fun OnnavigateToPostScreen(){
+        _navigateToPostScreen.value=false
+    }
 
 }

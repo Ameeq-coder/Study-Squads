@@ -20,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.studysquad.Navigations.Route
 import com.example.studysquad.R
 import com.example.studysquad.di.NavViewModel
 import com.example.studysquad.loginsignup.AuthViewModel
@@ -44,16 +47,23 @@ import com.example.studysquad.loginsignup.OutlinedTextFieldWithIcon
 import com.example.studysquad.post.ImagePickerViewModel
 
 @Composable
-fun CreatePost(
+fun CreateProfile(
     authViewModel: AuthViewModel,
 navController: NavController,
     navViewModel: NavViewModel,
 createProfileViewModel: CreateProfileViewModel
 ) {
-
-
+    val navigatetocreatepost=navViewModel.navigateToPostScreen.observeAsState()
     val emailstate = remember { mutableStateOf("") }
     val viewmodel: ImagePickerViewModel = viewModel()
+
+    LaunchedEffect(navigatetocreatepost.value){
+        if(navigatetocreatepost.value==true){
+            navController.navigate(Route.PostScreen.route){
+            }
+            navViewModel.OnnavigateToPostScreen()
+        }
+    }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -115,6 +125,7 @@ createProfileViewModel: CreateProfileViewModel
         GradientButton(text = "Create Profile", onClick = {
             if (selectedImageUri != null) {
                 createProfileViewModel.uploadUserProfile(emailstate.value, selectedImageUri)
+                navViewModel.navigateToPostScreen()
             } else {
                 // Handle the case where selectedImageUri is null
             }
