@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.studysquad.Chating.ChatScreen
+import com.example.studysquad.Chating.ChatViewModel
 import com.example.studysquad.CreateProfile.CreateProfile
 import com.example.studysquad.CreateProfile.CreateProfileViewModel
 import com.example.studysquad.di.NavViewModel
@@ -19,7 +21,9 @@ fun NavGraph(startDestination: String,
              authViewModel: AuthViewModel,
              navViewModel: NavViewModel,
              createProfileViewModel: CreateProfileViewModel,
-             postViewModel: PostViewModel) {
+             postViewModel: PostViewModel,
+             chatViewModel: ChatViewModel
+) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = startDestination) {
@@ -35,6 +39,9 @@ composable(Route.CreateProfile.route){
       composable(Route.PostScreen.route){
 PostScreen(postViewModel)
       }
+        composable(Route.ChatScreen.route){
+            ChatScreen(chatViewModel = chatViewModel)
+        }
 
     }
 }
