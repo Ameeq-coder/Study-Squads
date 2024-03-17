@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -49,12 +50,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.studysquad.Navigations.Route
 import com.example.studysquad.R
+import com.example.studysquad.di.NavViewModel
 
 @Composable
 fun ChatScreen(
     chatViewModel: ChatViewModel,
+    navViewModel: NavViewModel,
+    navController: NavController
 ) {
     val context = LocalContext.current
 
@@ -64,7 +71,7 @@ fun ChatScreen(
     } else {
         val chats = chatViewModel.chats.value
         val userdata = chatViewModel.userData.value
-        val chatUser=chatViewModel.chatuser.value
+        val chatUser = chatViewModel.chatuser.value
         val showdialog = remember {
             mutableStateOf(false)
         }
@@ -72,11 +79,11 @@ fun ChatScreen(
         val onDismiss: () -> Unit = { showdialog.value = false }
         val onAddChat: (String, String, String, String) -> Unit =
             { number, userId, userName, userProfileImageUrl ->
-                chatViewModel.AddOnChat( userId, userName, userProfileImageUrl)
+                chatViewModel.AddOnChat(userId, userName, userProfileImageUrl)
                 showdialog.value = true
             }
 
-            Scaffold(
+        Scaffold(
             floatingActionButton = {
                 FAB(
                     showDialog = showdialog.value,
@@ -123,7 +130,7 @@ fun ChatScreen(
                     } else {
                         LazyColumn(modifier = Modifier.weight(1f)) {
                             items(chats) {
-                                ChatItem(chatData = it, chatViewModel = chatViewModel)
+                                ChatItem(chatData = it, chatViewModel = chatViewModel, navController = navController)
                             }
                         }
                     }
@@ -144,58 +151,49 @@ fun ChatScreen(
 
 
 @Composable
-fun ChatItem(chatData: ChatData?, chatViewModel: ChatViewModel) {
+fun ChatItem(chatData: ChatData?, chatViewModel: ChatViewModel, navController: NavController) {
+//    val navViewModel: NavViewModel = viewModel()
+//    val navigateToMessageScreen by navViewModel.navigateToMessageScreen.observeAsState()
+
     val context = LocalContext.current
 
     val otherUser = chatData?.otherUserId
-
     val otherUserId = otherUser?.uid
 
-    var otherUserName by remember { mutableStateOf(otherUser?.name ?: "") }
-    var otherUserProfileImageUrl by remember { mutableStateOf(otherUser?.image ?: "") }
+    var otherUserName by remember(otherUserId) { mutableStateOf(otherUser?.name ?: "") }
+    var otherUserProfileImageUrl by remember(otherUserId) { mutableStateOf(otherUser?.image ?: "") }
+
+    // Update other user's information when chatData changes
+    if (chatData != null) {
+        otherUserName = otherUser?.name ?: ""
+        otherUserProfileImageUrl = otherUser?.image ?: ""
+    }
+
+
 
     // Display the user's information in a row
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /* Handle click if needed */ },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        CommonImage(
-            data = otherUserProfileImageUrl,
-            modifier = Modifier
-                .padding(8.dp)
-                .size(50.dp)
-                .clip(CircleShape)
-                .background(
-                    color = colorResource(id = R.color.lightblue)
-                )
-        )
-        Text(
-            text = otherUserName,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 4.dp),
-            color = colorResource(id = R.color.black)
-        )
+    CommonRow(imageurl = otherUserProfileImageUrl, name = otherUserName) {
+      otherUser?.uid.let {
+          navigateTo(navController,Route.MessageScreen.createRoute(otherUserId=it?:""))
+      }
     }
+
     DisposableEffect(otherUserId) {
-        if (otherUserId != null) { // Check if otherUserId is not null
+        if (otherUserId != null) {
             // Fetch chat data for this user when the otherUserId changes
             chatViewModel.fetchChatData { fetchedChatData: List<ChatData> ->
                 // Update the user's information based on the fetched chat data
-                    otherUserName = chatData.otherUserId.name
-                    otherUserProfileImageUrl = chatData.otherUserId.image
-                    Toast.makeText(context, " $otherUserName", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(context, " $otherUserProfileImageUrl", Toast.LENGTH_SHORT).show()
+                otherUserName = chatData?.otherUserId?.name ?: ""
+                otherUserProfileImageUrl = chatData?.otherUserId?.image ?: ""
+                Toast.makeText(context, " $otherUserName", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, " $otherUserProfileImageUrl", Toast.LENGTH_SHORT).show()
             }
         }
 
         // Dispose when the composable is removed from the composition
         onDispose {}
     }
-
 }
-
 
 
 @Composable
@@ -224,9 +222,11 @@ fun FAB(
                     chatViewModel.searchUserByUsername(addchatMember.value) { found, userData ->
                         if (found) {
                             // Add chat and update UI
-                            onAddChat(addchatMember.value, userData?.uid ?:"",
-                                userData?.name?:"",
-                                userData?.image?:"") /// error on this line
+                            onAddChat(
+                                addchatMember.value, userData?.uid ?: "",
+                                userData?.name ?: "",
+                                userData?.image ?: ""
+                            ) /// error on this line
 
                             OnDismiss.invoke()
                             addchatMember.value = ""
@@ -265,7 +265,6 @@ fun FAB(
 }
 
 
-
 @Composable
 fun CustomProgressBar(progress: Float, barHeight: Dp = 8.dp) {
     Surface(
@@ -301,26 +300,30 @@ fun CommonRow(imageurl: String?, name: String?, onitemClick: () -> Unit) {
                     color = colorResource(id = R.color.lightblue)
                 )
         )
-        Text(text = name ?: "",
-            fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp)
-                  ,  color = colorResource(id = R.color.black),)
+        Text(
+            text = name ?: "",
+            fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 4.dp),
+            color = colorResource(id = R.color.black),
+        )
     }
 
 
 }
 
 @Composable
-fun CommonImage(data: String?,
-                modifier: Modifier = Modifier.wrapContentSize(),
-                contentScale: ContentScale= ContentScale.Crop
-)
-{
-    val imagepainter= rememberImagePainter(data = data)
-    Image(painter = imagepainter,
+fun CommonImage(
+    data: String?,
+    modifier: Modifier = Modifier.wrapContentSize(),
+    contentScale: ContentScale = ContentScale.Crop
+) {
+    val imagepainter = rememberImagePainter(data = data)
+    Image(
+        painter = imagepainter,
         contentDescription = null,
-        modifier=modifier,
-        contentScale=contentScale
-        )
+        modifier = modifier,
+        contentScale = contentScale
+    )
+
 
 }
 

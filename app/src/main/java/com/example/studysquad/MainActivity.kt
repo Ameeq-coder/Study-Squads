@@ -12,6 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.studysquad.Chating.ChatData
+import com.example.studysquad.Chating.ChatScreen
+import com.example.studysquad.Chating.ChatViewModel
 import com.example.studysquad.CreateProfile.CreateProfileViewModel
 import com.example.studysquad.Navigations.NavGraph
 import com.example.studysquad.Navigations.Route
@@ -30,11 +33,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StudySquadTheme {
+                val chatData = ChatData(/* pass necessary parameters here */)
                 val authviewModel: AuthViewModel = viewModel()
                 val navViewModel:NavViewModel=viewModel()
                 val createprofileviewmodel:CreateProfileViewModel= viewModel()
                 val postViewModel:PostViewModel= viewModel()
-                NavGraph(startDestination = Route.SignupScreen.route, authViewModel = authviewModel, navViewModel = navViewModel,createprofileviewmodel,postViewModel)
+                val chatViewModel: ChatViewModel = viewModel()
+                NavGraph(
+                    startDestination = Route.LoginScreen.route,
+                    authViewModel = authviewModel,
+                    navViewModel = navViewModel,
+                    createProfileViewModel = createprofileviewmodel, // Specify parameter name
+                    postViewModel = postViewModel, // Specify parameter name
+                    chatViewModel = chatViewModel,
+                    chatData = chatData
+                )
             }
         }
     }

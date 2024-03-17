@@ -57,7 +57,7 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
     LaunchedEffect(navigatetoSignup.value) {
         if (navigatetoSignup.value == true) {
             // Navigate to the signup screen using the NavController
-            navController.navigate(Route.SignupScreen.route) {
+            navController.navigate(Route.ChatScreen.route) {
                 // Optionally, you can specify additional navigation options here
             }
             navViewModel.onNavigateToSignUpComplete()
@@ -104,11 +104,10 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
                     if (email.isEmpty() || password.isEmpty()) {
                         Toast.makeText(context, "Enter Details", Toast.LENGTH_SHORT).show()
                     } else {
-
-
                         authViewModel.login(emailstate.value, passwordstate.value) { isSuccess ->
                             if (isSuccess) {
                                 Toast.makeText(context, "Login Sucess", Toast.LENGTH_SHORT).show()
+                                navViewModel.navigateToSignUp()
                             } else {
                                 Toast.makeText(context, "Wrong Details Sorry", Toast.LENGTH_SHORT)
                                     .show()
@@ -118,6 +117,7 @@ fun Login(authViewModel: AuthViewModel, navController: NavController, navViewMod
 
                     }
                 },
+
                 gradient = Brush.verticalGradient(
                     colors = listOf(
                         colorResource(id = R.color.first_color),

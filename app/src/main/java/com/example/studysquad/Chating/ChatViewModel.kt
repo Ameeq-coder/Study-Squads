@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +23,7 @@ class ChatViewModel @Inject constructor(
     val chats = mutableStateOf<List<ChatData>>(listOf()) // where this variable is accessed
     val userData = mutableStateOf<UserDatas?>(null)
     val chatuser = mutableStateOf<ChatUser?>(null)
+
 
     fun AddOnChat( userId: String, userName: String, userProfileImageUrl: String) {
         val currentUserUid = firebaseAuth.currentUser?.uid ?: return
@@ -105,6 +107,49 @@ class ChatViewModel @Inject constructor(
     }
 
 
+    fun onSendReply(otherUserId: String, message: String) {
+        val uid = firebaseAuth.currentUser?.uid
+        val time = Calendar.getInstance().time.toString()
+
+        // Create message objects for sender and receiver
+        val sentMessage = SendMessage(uid, message, time)
+        val receivedMessage = ReceiveMessage(uid!!, message, time)
+
+        // Generate unique message IDs for sender and receiver
+        val senderMessageId = firebaseDatabase.reference
+            .child("Messages")
+            .child(uid)
+            .child("Sent")
+            .push()
+            .key ?: ""
+
+        val receiverMessageId = firebaseDatabase.reference
+            .child("Messages")
+            .child(otherUserId)
+            .child("Received")
+            .push()
+            .key ?: ""
+
+        // Store the sent message under sender's node
+        firebaseDatabase.reference
+            .child("Messages")
+            .child(uid)
+            .child(otherUserId)
+            .child("Sent")
+            .child(senderMessageId)
+            .setValue(sentMessage)
+
+        // Store the received message under receiver's node
+        firebaseDatabase.reference
+            .child("Messages")
+            .child(otherUserId)
+            .child(uid)
+            .child("Received")
+            .child(receiverMessageId)
+            .setValue(receivedMessage)
+    }
+
+
     private fun uploadChatInfo(
         otherUserId: String,
         otherUserName: String,
@@ -146,14 +191,12 @@ class ChatViewModel @Inject constructor(
                 }
         }
     }
-
     fun fetchChatData(onDataFetched: (List<ChatData>) -> Unit) {
         val user = firebaseAuth.currentUser
         val userId = user?.uid ?: return // Ensure user is signed in
 
         val currentUserChatRef = firebaseDatabase.reference.child("Chats").child(userId)
-
-        currentUserChatRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        currentUserChatRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val chatDataList = mutableListOf<ChatData>()
 
@@ -187,8 +230,81 @@ class ChatViewModel @Inject constructor(
         })
     }
 
+    fun fetchUserData(otherUserId: String, onSuccess: (UserDatas) -> Unit) {
+        val usersRef = firebaseDatabase.reference.child("Profiles").child("Users").child(otherUserId)
+        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val otherUserName = snapshot.child("username").getValue(String::class.java) ?: ""
+                val otherUserProfileImageUrl = snapshot.child("profileImageUrl").getValue(String::class.java) ?: ""
+                val userData = UserDatas(otherUserId,otherUserName, otherUserProfileImageUrl)
+                Log.d("FETCHOTHERUSER","$userData")
+                onSuccess(userData)
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                // Handle failure
+            }
+        })
+    }
+    fun fetchSentMessages(otheruserId: String, onDataFetched: (List<SendMessage>) -> Unit) {
+        val uid = firebaseAuth.currentUser?.uid
+        val sentMessagesRef = firebaseDatabase.reference
+            .child("Messages")
+            .child(uid?:"")
+            .child(otheruserId)
+            .child("Sent")
 
+        sentMessagesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val sentMessagesList = mutableListOf<SendMessage>()
 
+                snapshot.children.forEach { messageSnapshot ->
+                    val message = messageSnapshot.getValue(SendMessage::class.java)
+                    message?.let {
+                        sentMessagesList.add(it)
+                    }
+                }
+
+                onDataFetched(sentMessagesList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle failure
+            }
+        })
+    }
+
+    // Function to fetch received messages
+    fun fetchReceivedMessages(otheruserId: String, onDataFetched: (List<ReceiveMessage>) -> Unit) {
+        val uid = firebaseAuth.currentUser?.uid
+        val receivedMessagesRef = firebaseDatabase.reference
+            .child("Messages")
+            .child(uid?:"")
+            .child(otheruserId)
+            .child("Received")
+
+        receivedMessagesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val receivedMessagesList = mutableListOf<ReceiveMessage>()
+
+                snapshot.children.forEach { messageSnapshot ->
+                    val message = messageSnapshot.getValue(ReceiveMessage::class.java)
+                    message?.let {
+                        receivedMessagesList.add(it)
+                    }
+                }
+
+                onDataFetched(receivedMessagesList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle failure
+            }
+        })
+    }
 }
+
+
+
+
 

@@ -1,5 +1,6 @@
 package com.example.studysquad.Navigations
 
+
 sealed class Route(
     val route: String
 ) {
@@ -13,4 +14,7 @@ sealed class Route(
 
     object ChatScreen: Route(route = "chat_screen")
 
+    object MessageScreen:Route(route = "message_screen/{otherUserId}"){
+        fun createRoute(otherUserId:String)="message_screen/$otherUserId"
+    }
 }

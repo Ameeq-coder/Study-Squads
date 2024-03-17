@@ -17,6 +17,15 @@ class NavViewModel @Inject constructor() :ViewModel() {
     private val _navigateToPostScreen=MutableLiveData<Boolean>()
     val navigateToPostScreen:LiveData<Boolean> = _navigateToPostScreen
 
+    private val _navigateToMessageScreen = MutableLiveData<String?>()
+    val navigateToMessageScreen: LiveData<String?> = _navigateToMessageScreen
+
+
+
+    var otherUserId: String? = null
+    var otherUserName: String? = null
+    var otherUserProfileImageUrl: String? = null
+
     fun navigateToSignUp() {
         _navigateToSignUp.value = true
     }
@@ -38,5 +47,13 @@ class NavViewModel @Inject constructor() :ViewModel() {
     fun OnnavigateToPostScreen(){
         _navigateToPostScreen.value=false
     }
+    fun navigateToMessageScreen(uid: String?) {
+        _navigateToMessageScreen.value = uid // Pass the uid to the LiveData
+    }
+
+    fun onNavigateToMessageScreen() {
+        _navigateToMessageScreen.value = null // Clear the value
+    }
+
 
 }
