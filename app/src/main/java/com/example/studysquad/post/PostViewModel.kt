@@ -28,24 +28,38 @@ class PostViewModel @Inject constructor(
 
 
             // Upload post content to Firebase Realtime Database
-            val postRef = firebaseDatabase.reference.child("posts").child(userId)
+            val MypostRef = firebaseDatabase.reference.child("Myposts").child(userId).push()
+            val MypostData = PostData(
+                userId,
+                userName,
+                userProfileImageUrl.toString(),
+                postContent,
+                imageUri.toString(),
+                0
+            )
+
+            MypostRef.setValue(MypostData)
+
+            val postRef = firebaseDatabase.reference.child("Posts").push()
             val postData = PostData(
                 userId,
                 userName,
                 userProfileImageUrl.toString(),
                 postContent,
-                imageUri.toString()
+                imageUri.toString(),
+            0
             )
             postRef.setValue(postData)
 
+
             // Upload post image to Firebase Storage
-            val imageRef = firebaseStorage.reference.child("post_images").child(postRef.key!!)
+            val imageRef = firebaseStorage.reference.child("post_images").child(MypostRef.key!!)
             imageRef.putFile(imageUri)
                 .addOnSuccessListener { taskSnapshot ->
                     // Get the download URL of the uploaded image
                     imageRef.downloadUrl.addOnSuccessListener { uri ->
                         // Update post data in Firebase Realtime Database with image URL
-                        postRef.child("imageUrl").setValue(uri.toString())
+                        MypostRef.child("imageUrl").setValue(uri.toString())
                     }
                 }
         }

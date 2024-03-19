@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                 val postViewModel:PostViewModel= viewModel()
                 val chatViewModel: ChatViewModel = viewModel()
                 NavGraph(
-                    startDestination = Route.LoginScreen.route,
+                    startDestination = Route.SignupScreen.route,
                     authViewModel = authviewModel,
                     navViewModel = navViewModel,
                     createProfileViewModel = createprofileviewmodel, // Specify parameter name

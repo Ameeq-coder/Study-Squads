@@ -5,5 +5,6 @@ data class PostData(
     val userName: String?,
     val userProfileImageUrl: String?,
     val postContent: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+    val likes: Int? = 0
 )
